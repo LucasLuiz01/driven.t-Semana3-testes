@@ -14,7 +14,7 @@ async function getHotelsUser(userId: number) {
   const enrollmentId: number = enrollment.id
   const ticket: Ticket & {
     TicketType: TicketType;
-  }  =  await ticketRepository.findTickeWithTypeById(enrollmentId);
+  }  =  await ticketRepository.findTicketByEnrollmentId(enrollmentId);
   if (!ticket) {
     throw notFoundError();
   }

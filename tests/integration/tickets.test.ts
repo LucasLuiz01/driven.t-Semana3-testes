@@ -11,7 +11,6 @@ import { cleanDb, generateValidToken } from "../helpers";
 beforeAll(async () => {
   await init();
 });
-
 beforeEach(async () => {
   await cleanDb();
 });
@@ -178,7 +177,6 @@ describe("POST /tickets", () => {
       const token = await generateValidToken(user);
       await createEnrollmentWithAddress(user);
       await createTicketType();
-
       const response = await server.post("/tickets").set("Authorization", `Bearer ${token}`).send({});
 
       expect(response.status).toEqual(httpStatus.BAD_REQUEST);
