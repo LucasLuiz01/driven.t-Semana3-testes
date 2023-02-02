@@ -28,16 +28,19 @@ async function getHotelsUser(userId: number) {
 async function getHotelByHotelId(userId:number, hotelId:number){
   const enrollment: Enrollment = await enrollmentRepository.findEnrollmentByUserId(userId)
   if (!enrollment) {
+    console.log("cai aquiiiiiiii")
     throw notFoundError();
   }
   const enrollmentId: number = enrollment.id
   const ticket: Ticket & {
     TicketType: TicketType;
-  }=  await ticketRepository.findTickeWithTypeById(enrollmentId);
+  }=  await ticketRepository.findTicketByEnrollmentId(enrollmentId);
   if (!ticket) {
     throw notFoundError();
+    console.log("cai aquiiiiiiii")
   }
   if(ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false){
+    console.log("cai aquiiiiiiii")
     throw paymentRequired();
   }
   const hotel = await hotelsRepository.getHotelsById(hotelId);
