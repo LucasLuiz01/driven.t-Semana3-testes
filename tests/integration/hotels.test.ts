@@ -112,7 +112,7 @@ describe("GET /hotels", () => {
      expect(response.status).toBe(httpStatus.NOT_FOUND);
    })
 
-   it("should respond with status 200 when is valid", async () => {
+   it("should respond with status 200 when everything is right", async () => {
     const user: User = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -131,8 +131,8 @@ describe("GET /hotels", () => {
         id: hotel.id,
         name: hotel.name,
         image: hotel.image,
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String)
+        createdAt: hotel.createdAt.toISOString(),
+        updatedAt: hotel.updatedAt.toISOString()
       }])
      )
    })
@@ -225,7 +225,7 @@ describe("GET /hotels/:hotelId", () => {
      const response = await server.get(`/hotels/${hotel.id + 1}`).set("Authorization", `Bearer ${token}`);
      expect(response.status).toBe(httpStatus.NOT_FOUND);
    })
-   it("should respond with status 200 and body when valid", async () => {
+   it("should respond with status 200 when everything is right", async () => {
     const user: User = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -245,16 +245,16 @@ describe("GET /hotels/:hotelId", () => {
           id: hotel.id,
           name: hotel.name,
           image: hotel.image,
-           createdAt:expect.any(String),
-           updatedAt:expect.any(String),
+           createdAt: hotel.createdAt.toISOString(),
+           updatedAt: hotel.updatedAt.toISOString(),
           Rooms: [
             {
               id: rooms.id,
               name: rooms.name,
               capacity: rooms.capacity,
               hotelId: rooms.hotelId,
-              createdAt:expect.any(String),
-              updatedAt:expect.any(String),
+              createdAt: rooms.createdAt.toISOString(),
+              updatedAt: rooms.updatedAt.toISOString(),
             }
           ]
         }
