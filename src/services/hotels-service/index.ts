@@ -22,6 +22,9 @@ async function getHotelsUser(userId: number) {
     throw paymentRequired();
   }
   const hotels = await hotelsRepository.getHotelsUser();
+  if(!hotels || hotels.length === 0){
+    return notFoundError
+  }
   return hotels;
 }
 ///////////////////////////////////////////////////////////////////
@@ -37,10 +40,8 @@ async function getHotelByHotelId(userId:number, hotelId:number){
   }=  await ticketRepository.findTicketByEnrollmentId(enrollmentId);
   if (!ticket) {
     throw notFoundError();
-    console.log("cai aquiiiiiiii")
   }
   if(ticket.status === "RESERVED" || ticket.TicketType.isRemote === true || ticket.TicketType.includesHotel === false){
-    console.log("cai aquiiiiiiii")
     throw paymentRequired();
   }
   const hotel = await hotelsRepository.getHotelsById(hotelId);

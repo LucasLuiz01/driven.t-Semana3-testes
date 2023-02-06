@@ -97,7 +97,22 @@ describe("GET /hotels", () => {
      const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
      expect(response.status).toBe(httpStatus.PAYMENT_REQUIRED);
    })
-   it("should respond with status 200", async () => {
+
+   it("should respond with status 404 when does not hotels", async () => {
+    const user: User = await createUser();
+    const token = await generateValidToken(user);
+    const enrollment = await createEnrollmentWithAddress(user);
+    const isRemote = false;
+    const includesHotel = true;
+    const ticketType = await createTicketTypeHotel(isRemote,includesHotel);
+    const enrollmentId = enrollment.id
+    const ticketTypeId = ticketType.id
+    const ticket = await createTicket(enrollmentId, ticketTypeId, TicketStatus.PAID);
+     const response = await server.get("/hotels").set("Authorization", `Bearer ${token}`);
+     expect(response.status).toBe(httpStatus.NOT_FOUND);
+   })
+
+   it("should respond with status 200 when is valid", async () => {
     const user: User = await createUser();
     const token = await generateValidToken(user);
     const enrollment = await createEnrollmentWithAddress(user);
@@ -113,9 +128,9 @@ describe("GET /hotels", () => {
      expect(response.status).toBe(httpStatus.OK);
      expect(response.body).toEqual(
       expect.arrayContaining([{
-        id: expect.any(Number),
-        name: expect.any(String),
-        image: expect.any(String),
+        id: hotel.id,
+        name: hotel.name,
+        image: hotel.image,
         createdAt: expect.any(String),
         updatedAt: expect.any(String)
       }])
